@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 use App\Post;
 
-class PostsSeeder extends Seeder
+class PostSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,10 +13,6 @@ class PostsSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Post::class,100)->create()->each(
-            function($el){
-                $el->save();
-            }
-        );
+        factory(App\Post::class, 100)->create();
     }
 }

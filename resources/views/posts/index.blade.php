@@ -5,21 +5,22 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">FK Categories</th>
-            <th scope="col">Title</th>
-            <th scope="col">Author</th>
+            <th scope="col">Title Post</th>
+            <th scope="col">Title Category</th>           
+            <th scope="col">Description PostInfo</th>
         </tr>
     </thead>
     <tbody>
+
         @foreach ($posts as $post)              
         <tr>
-            <th scope="row">{{ $post->id }}</th>
-            <th scope="row">{{ $post->category_id }}</th>
             <td>{{ $post->title }}</td>
-            <td>{{ $post->author }}</td>
+            <td>{{ $post->category->title }}</td>
+            <td>{{ $post->postInfo->description }}</td>
+
         </tr>
         @endforeach
+
     </tbody>
 </table>
 @endsection

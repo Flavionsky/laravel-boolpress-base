@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Post;
 
+use App\Category;
+
+use App\PostInformation;
+
+
 class PostsController extends Controller
 {
     /**
@@ -17,7 +22,9 @@ class PostsController extends Controller
     {
         $posts = Post::all();
 
+
         return view('posts.index', compact('posts'));
+
     }
 
     /**
