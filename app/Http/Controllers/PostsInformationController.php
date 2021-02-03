@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\PostInformation;
+
 class PostsInformationController extends Controller
 {
     /**
@@ -13,7 +15,9 @@ class PostsInformationController extends Controller
      */
     public function index()
     {
-        //
+        $postsinformation = PostInformation::all();
+
+        return view('postsinformation.index', compact('postsinformation'));
     }
 
     /**
