@@ -10,6 +10,9 @@ use App\Category;
 
 use App\PostInformation;
 
+use App\Tag;
+
+use Illuminate\Support\Str;
 
 class PostsController extends Controller
 {
@@ -24,7 +27,6 @@ class PostsController extends Controller
 
 
         return view('posts.index', compact('posts'));
-
     }
 
     /**
@@ -34,7 +36,10 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        $tags = Tag::all();
+        $categories = Category::all();
+
+        return view('posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -45,7 +50,27 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $newPost = new Post;
+
+        $newPost->title = $data['title'];
+        $newPost->author = $data['author'];
+        $newPost->category_id = $data['category_id'];
+
+        $newPost->save();
+
+        $newPostInfo = new PostInformation;
+        $newPostInfo->post_id = $newPost->id;
+
+        $newPostInfo->slug = Str::slug($newPost->title);
+        $newPostInfo->description = $data['description'];
+
+        $newPostInfo->save();
+
+        $newPost->tags()->attach($data['tags']);
+
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -54,9 +79,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -65,9 +90,17 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+
+        $data = [
+            'categories' => Category::all(),
+            'tags' => Tag::all(),
+            'post' => $post
+        ];
+
+
+        return view('posts.edit', $data);
     }
 
     /**
@@ -77,9 +110,21 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $data = $request->all();
+
+        $post->update([
+            'title' => $data['title'],
+            'author' => $data['author'],
+            'category_id' => $data['category_id']
+        ]);
+
+        $post->postInfo()->update(['description' => $data['description']]);
+
+        $post->tags()->sync($data['tags']);
+
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -88,8 +133,14 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->postInfo->delete();
+
+        $post->tags->delete();
+
+        $post->delete();
+
+        return redirect()->back();
     }
 }
