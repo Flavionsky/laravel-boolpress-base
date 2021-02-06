@@ -137,7 +137,11 @@ class PostsController extends Controller
     {
         $post->postInfo->delete();
 
-        $post->tags->delete();
+        foreach ($post->tags as $tag) {
+
+            $post->tags()->detach($tag->id);
+
+        }
 
         $post->delete();
 

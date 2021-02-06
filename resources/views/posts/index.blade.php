@@ -44,7 +44,7 @@
                 </ol>
             </td>
             <td>
-                <form action="{{route('posts.show', $post->id)}}">
+                <form action="{{route('posts.show', $post)}}">
                     <input class="btn btn-primary" type="submit" value="Maggiori dettagli"/>
                 </form>
             </td>
