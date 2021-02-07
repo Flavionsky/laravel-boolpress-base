@@ -48,12 +48,7 @@
                 <ul>
                     @foreach ($tags as $tag)
 
-                    <li><input type="checkbox" name="tags[]" value="{{ $tag->id }}"
-                            @foreach ($post->tags as $postTag) 
-                            @if ($postTag->id == $tag->id)
-                                checked 
-                            @endif
-                            @endforeach
+                    <li><input type="checkbox" name="tags[]" value="{{ $tag->id }}" {{ $post->tags->contains($tag) ? 'checked' : '' }}
                     >
                     {{ $tag->name }}</li>
                     @endforeach
